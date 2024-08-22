@@ -5,7 +5,7 @@ from peft import load_peft_weights, PeftConfig
 from safetensors.torch import save_file
 
 
-
+import transformers
 from transformers import (
     AutoModelForSeq2SeqLM,
     AutoModelForCausalLM,
