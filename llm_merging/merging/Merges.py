@@ -3,6 +3,7 @@ import os
 
 from peft import load_peft_weights, PeftConfig
 from safetensors.torch import save_file
+import torch
 
 
 from transformers import (
