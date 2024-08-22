@@ -5,11 +5,11 @@ from peft import load_peft_weights, PeftConfig
 from safetensors.torch import save_file
 
 
-import transformers
 from transformers import (
     AutoModelForSeq2SeqLM,
     AutoModelForCausalLM,
-    AutoTokenizer
+    AutoTokenizer,
+    BitsAndBytesConfig
 )
 
 import llm_merging.model.decoder_functions as decoder_functions
@@ -48,7 +48,7 @@ class Merges(object):
         raise NotImplementedError
 
     def _load_base_model(self):
-        bnb_config = transformers.BitsAndBytesConfig(load_in_4bit=True, bnb_4bit_use_double_quant=True,
+        bnb_config = BitsAndBytesConfig(load_in_4bit=True, bnb_4bit_use_double_quant=True,
                                                      bnb_4bit_quant_type="nf4",
                                                      bnb_4bit_compute_dtype=torch.bfloat16)
         if self.architecture == "encoder_decoder":
