@@ -53,9 +53,9 @@ class Merges(object):
                                                      bnb_4bit_quant_type="nf4",
                                                      bnb_4bit_compute_dtype=torch.bfloat16)
         if self.architecture == "encoder_decoder":
-            self.base_model =  AutoModelForSeq2SeqLM.from_pretrained(self.base_model_name, revision=self.base_model_revision_id, quantization_config=bnb_config, token=os.environ["HF_AUTH_TOKEN"]).to(self.device)
+            self.base_model =  AutoModelForSeq2SeqLM.from_pretrained(self.base_model_name, revision=self.base_model_revision_id, quantization_config=bnb_config, token=os.environ["HF_AUTH_TOKEN"])#.to(self.device)
         elif self.architecture == "decoder":
-            self.base_model =  AutoModelForCausalLM.from_pretrained(self.base_model_name, revision=self.base_model_revision_id, quantization_config=bnb_config, token=os.environ["HF_AUTH_TOKEN"]).to(self.device)
+            self.base_model =  AutoModelForCausalLM.from_pretrained(self.base_model_name, revision=self.base_model_revision_id, quantization_config=bnb_config, token=os.environ["HF_AUTH_TOKEN"])#.to(self.device)
         else:
             raise NotImplementedError(f"Architecture not implemented {self.architecture}")
         
