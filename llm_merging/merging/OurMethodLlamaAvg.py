@@ -7,7 +7,6 @@ from peft import get_peft_model, set_peft_model_state_dict
 class OurMethodLlamaAvg(Merges):
     def __init__(self, name, base_model, models, parameter_lambdas):
         super().__init__(name)
-
         '''
         These values are meant to be modified by the user.
         '''
