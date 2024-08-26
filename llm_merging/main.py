@@ -82,9 +82,9 @@ def main_func(merge_method):
         # Evaluate method on fixed datasets (used for developing method)
         all_scores = evaluate_model(
             merge_method,
-            ["data/cosmos_qa.json", "data/xsum.json"],
-            ["multiple_choice", "generation"],
-            ["accuracy", "rouge"],
+            ["data/cosmos_qa.json"], # , "data/xsum.json"],
+            ["multiple_choice"], # , "generation"],
+            ["accuracy"], # , "rouge"],
         )
 
     return all_scores
