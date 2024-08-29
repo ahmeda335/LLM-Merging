@@ -62,6 +62,7 @@ class OurMethodLlamaAvg(Merges):
         for parameter_name in all_parameter_names:
             merged_parameter = None
             for i in range(2):
+                print(i)
                 for half_parameter_lambda, model in zip(half_parameter_lambdas, all_models):
                     parameter = model[parameter_name]
                     if merged_parameter is None:
@@ -74,7 +75,7 @@ class OurMethodLlamaAvg(Merges):
                             assert "B" in parameter_name
                             parameter = torch.cat([torch.zeros_like(parameter), parameter], dim=1)
                         merged_parameter += parameter * half_parameter_lambda
-                        print(i)
+
             self.merged_model[parameter_name] = merged_parameter
 
         '''
