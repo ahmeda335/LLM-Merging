@@ -62,10 +62,10 @@ class OurMethodLlamaAvg(Merges):
         for parameter_name in all_parameter_names:
             merged_parameter = None
             for i in range(2):
-                for half_parameter_lambdas, model in zip(half_parameter_lambdas, all_models):
+                for half_parameter_lambda, model in zip(half_parameter_lambdas, all_models):
                     parameter = model[parameter_name]
                     if merged_parameter is None:
-                        merged_parameter = torch.clone(parameter) * half_parameter_lambdas
+                        merged_parameter = torch.clone(parameter) * half_parameter_lambda
                     else:
                         # first model has rank 16 and second model has rank 8, so we expand the second model to rank 16 by adding zeros
                         if "A" in parameter_name:
@@ -73,7 +73,7 @@ class OurMethodLlamaAvg(Merges):
                         else:
                             assert "B" in parameter_name
                             parameter = torch.cat([torch.zeros_like(parameter), parameter], dim=1)
-                        merged_parameter += parameter * half_parameter_lambdas
+                        merged_parameter += parameter * half_parameter_lambda
             self.merged_model[parameter_name] = merged_parameter
 
         '''
