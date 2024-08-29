@@ -74,6 +74,7 @@ class OurMethodLlamaAvg(Merges):
                             assert "B" in parameter_name
                             parameter = torch.cat([torch.zeros_like(parameter), parameter], dim=1)
                         merged_parameter += parameter * half_parameter_lambda
+                        print(i)
             self.merged_model[parameter_name] = merged_parameter
 
         '''
