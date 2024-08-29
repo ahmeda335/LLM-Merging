@@ -53,23 +53,27 @@ class OurMethodLlamaAvg(Merges):
         # Get individual models
         all_models = list(self.loaded_models.values())
 
+        # Getting the halves of parameter_lambdas
+        half_parameter_lambdas = [parameter/2 for parameter in parameter_lambdas]
+
         # Get all the parameters names (uses the first model and assume all the models have the same parameter)
         all_parameter_names = all_models[0].keys()
 
         for parameter_name in all_parameter_names:
             merged_parameter = None
-            for parameter_lambda, model in zip(parameter_lambdas, all_models):
-                parameter = model[parameter_name]
-                if merged_parameter is None:
-                    merged_parameter = torch.clone(parameter) * parameter_lambda
-                else:
-                    # first model has rank 16 and second model has rank 8, so we expand the second model to rank 16 by adding zeros
-                    if "A" in parameter_name:
-                        parameter = torch.cat([torch.zeros_like(parameter), parameter], dim=0)
+            for i in range(2):
+                for half_parameter_lambdas, model in zip(half_parameter_lambdas, all_models):
+                    parameter = model[parameter_name]
+                    if merged_parameter is None:
+                        merged_parameter = torch.clone(parameter) * half_parameter_lambdas
                     else:
-                        assert "B" in parameter_name
-                        parameter = torch.cat([torch.zeros_like(parameter), parameter], dim=1)
-                    merged_parameter += parameter * parameter_lambda
+                        # first model has rank 16 and second model has rank 8, so we expand the second model to rank 16 by adding zeros
+                        if "A" in parameter_name:
+                            parameter = torch.cat([torch.zeros_like(parameter), parameter], dim=0)
+                        else:
+                            assert "B" in parameter_name
+                            parameter = torch.cat([torch.zeros_like(parameter), parameter], dim=1)
+                        merged_parameter += parameter * half_parameter_lambdas
             self.merged_model[parameter_name] = merged_parameter
 
         '''
